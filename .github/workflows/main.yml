@@ -36,7 +36,7 @@ jobs:
             -s FULL_ES2=1 \
             -s MIN_WEBGL_VERSION=1 \
             -s MAX_WEBGL_VERSION=1 \
-            --preload-file assets \
+            --preload-file asserts \
             -s ALLOW_MEMORY_GROWTH=1 \
             -o dist/index.html
         shell: bash
