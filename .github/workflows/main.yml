@@ -1,4 +1,4 @@
-name: Build and Deploy SDL2 + OpenGL ES + TinyGLTF + Emscripten
+name: Build and Deply SDL2 OpenGL Emscripten
 
 on:
   push:
@@ -12,19 +12,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js (required for Emscripten)
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
       - name: Setup Emscripten SDK
         run: |
           git clone https://github.com/emscripten-core/emsdk.git
           cd emsdk
           ./emsdk install 3.1.65
           ./emsdk activate 3.1.65
-          echo "source $(pwd)/emsdk_env.sh" >> $GITHUB_ENV
         shell: bash
+ 
+      - name: Build Assimp (Emscripten)
+        run: |
+          source ./emsdk/emsdk_env.sh
 
       - name: Compile C++ to WebAssembly
         run: |
