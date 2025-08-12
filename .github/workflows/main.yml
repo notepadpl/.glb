@@ -16,7 +16,8 @@ jobs:
         run: |
           sudo apt update 
           sudo apt install -y libglm-dev
-    
+          git clone https://github.com/g-truc/glm.git
+          
       - name: Setup Emscripten SDK
         run: |
           git clone https://github.com/emscripten-core/emsdk.git
