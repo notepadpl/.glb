@@ -13,14 +13,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Emscripten SDK
-        run: |
-          git clone https://github.com/emscripten-core/emsdk.git
-          cd emsdk
-          ./emsdk install 3.1.65
-          ./emsdk activate 3.1.65
-          echo "source $(pwd)/emsdk_env.sh" >> $GITHUB_ENV
-        shell: bash
+      - name: Install Emscripten
+  run: |
+    git clone https://github.com/emscripten-core/emsdk.git
+    cd emsdk
+    ./emsdk install 3.1.65
+    ./emsdk activate 3.1.65
+    source ./emsdk_env.sh
+    env | grep -E 'EMSDK|EMSCRIPTEN|LLVM|NODE|PATH' >> $GITHUB_ENV
 
       - name: Compile C++ to WebAssembly
         run: |
