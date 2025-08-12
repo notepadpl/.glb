@@ -60,7 +60,7 @@ int main() {
         return 1;
     }
 
-    LoadGLBModel("asserts/model.glb"); // pamiętaj o załączeniu w systemie plików
+    LoadGLBModel("asserts/vr_room_light_baked.glb"); // pamiętaj o załączeniu w systemie plików
 
     emscripten_set_main_loop(main_loop, 0, true);
     return 0;
