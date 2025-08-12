@@ -11,7 +11,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
+    
+      - name: Install dependencies
+        run: |
+          sudo apt update \
+          sudo apt install -y libglm-dev
+    
       - name: Setup Emscripten SDK
         run: |
           git clone https://github.com/emscripten-core/emsdk.git
@@ -19,7 +24,7 @@ jobs:
           ./emsdk install 3.1.65
           ./emsdk activate 3.1.65
         shell: bash
-
+ 
       - name: Clone tinygltf repository (release branch)
         run: |
           git clone --branch release https://github.com/syoyo/tinygltf.git
