@@ -31,7 +31,6 @@ jobs:
           mkdir -p dist
           em++ main.cpp \
             tinygltf/tiny_gltf.cc \
-            tinygltf/extras/Johnson.cpp \
             -Itinygltf \
             -Itinygltf/extras \
             -s WASM=1 \
