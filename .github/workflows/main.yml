@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js (potrzebne do Emscripten)
+      - name: Setup Node.js (required for Emscripten)
         uses: actions/setup-node@v3
         with:
           node-version: '18'
@@ -23,22 +23,24 @@ jobs:
           cd emsdk
           ./emsdk install 3.1.65
           ./emsdk activate 3.1.65
+          echo "source $(pwd)/emsdk_env.sh" >> $GITHUB_ENV
         shell: bash
 
       - name: Compile C++ to WebAssembly
         run: |
-          source emsdk/emsdk_env.sh
+          source $GITHUB_ENV
           mkdir -p dist
           em++ main.cpp \
-            -std=c++17 \
-            -s WASM=1 \
-            -s USE_SDL=2 \
-            -s FULL_ES2=1 \
-            -s MIN_WEBGL_VERSION=1 \
-            -s MAX_WEBGL_VERSION=1 \
-            --preload-file asserts \
-            -s ALLOW_MEMORY_GROWTH=1 \
-            -o dist/index.html
+               tiny_gltf.cc \
+               -std=c++17 \
+               -s WASM=1 \
+               -s USE_SDL=2 \
+               -s FULL_ES2=1 \
+               -s MIN_WEBGL_VERSION=1 \
+               -s MAX_WEBGL_VERSION=1 \
+               --preload-file asserts \
+               -s ALLOW_MEMORY_GROWTH=1 \
+               -o dist/index.html
         shell: bash
 
       - name: Deploy to GitHub Pages
