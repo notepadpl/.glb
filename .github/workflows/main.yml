@@ -31,7 +31,7 @@ jobs:
           source emsdk/emsdk_env.sh
           mkdir -p build dist
 
-          em++ src/main.cpp \
+          em++ main.cpp \
             -Ithirdparty/tinygltf \
             -s USE_SDL=2 \
             -s USE_WEBGL2=1 \
