@@ -1,4 +1,4 @@
-name: Build and Deploy SDL2 OpenGL Emscripten
+name: Build tinygltf with Emscripten
 
 on:
   push:
@@ -6,34 +6,48 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Emscripten
-  run: |
-    git clone https://github.com/emscripten-core/emsdk.git
-    cd emsdk
-    ./emsdk install 3.1.65
-    ./emsdk activate 3.1.65
-    source ./emsdk_env.sh
-    env | grep -E 'EMSDK|EMSCRIPTEN|LLVM|NODE|PATH' >> $GITHUB_ENV
-
-      - name: Compile C++ to WebAssembly
+      - name: Setup Emscripten
         run: |
-          source $GITHUB_ENV
-          mkdir -p dist
-          em++ main.cpp \
-               tiny_gltf.cc \
-               -std=c++17 \
-               -s WASM=1 \
-               -s USE_SDL=2 \
-               -s FULL_ES2=1 \
-               -s MIN_WEBGL_VERSION=1 \
-               -s MAX_WEBGL_VERSION=1 \
+          git clone https://github.com/emscripten-core/emsdk.git
+          cd emsdk
+          ./emsdk install 3.1.65
+          ./emsdk activate 3.1.65
+        shell: bash
+
+      - name: Download tinygltf
+        run: |
+          mkdir -p thirdparty/tinygltf
+          curl -L https://raw.githubusercontent.com/syoyo/tinygltf/master/tiny_gltf.h -o thirdparty/tinygltf/tiny_gltf.h
+
+      - name: Compile with tinygltf
+        run: |
+          source emsdk/emsdk_env.sh
+          mkdir -p build dist
+
+          em++ src/main.cpp \
+            -Ithirdparty/tinygltf \
+            -s USE_SDL=2 \
+            -s USE_WEBGL2=1 \
+            -s ALLOW_MEMORY_GROWTH=1 \
+            -s ASSERTIONS=1 \
+            -s DEMANGLE_SUPPORT=1 \
+            -std=c++17 \
+            -O2 \
+            -o dist/index.html
+        shell: bash
+
+      - name: Upload WebAssembly build
+        uses: actions/upload-artifact@v4
+        with:
+          name: tinygltf-wasm-build
+          path: dist/
                --preload-file asserts \
                -s ALLOW_MEMORY_GROWTH=1 \
                -o dist/index.html
