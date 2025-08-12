@@ -1,4 +1,4 @@
-name: Build and Deply SDL2 OpenGL Emscripten
+name: Build and Deploy SDL2 OpenGL Emscripten
 
 on:
   push:
@@ -10,7 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Setup Emscripten SDK
         run: |
@@ -18,11 +19,8 @@ jobs:
           cd emsdk
           ./emsdk install 3.1.65
           ./emsdk activate 3.1.65
+          echo "source $(pwd)/emsdk_env.sh" >> $GITHUB_ENV
         shell: bash
- 
-      - name: Build Assimp (Emscripten)
-        run: |
-          source ./emsdk/emsdk_env.sh
 
       - name: Compile C++ to WebAssembly
         run: |
