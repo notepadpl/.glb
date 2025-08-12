@@ -43,15 +43,7 @@ jobs:
             -o dist/index.html
         shell: bash
 
-      - name: Upload WebAssembly build
-        uses: actions/upload-artifact@v4
-        with:
-          name: tinygltf-wasm-build
-          path: dist/
-               --preload-file asserts \
-               -s ALLOW_MEMORY_GROWTH=1 \
-               -o dist/index.html
-        shell: bash
+      
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
