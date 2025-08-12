@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-#include <GLES2/gl2.h> // WebGL to OpenGL ES 2.0
+#include <GLES2/gl2.h> // WebGL to OpenGL ES2.0
 #include <emscripten.h>
 #include <iostream>
 #include "tiny_gltf.h"
