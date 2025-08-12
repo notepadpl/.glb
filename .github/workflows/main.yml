@@ -1,4 +1,4 @@
-name: Build tinygltf with Emscripten
+name: Build and Deploy SDL2 OpenGL Emscripten
 
 on:
   push:
@@ -6,14 +6,13 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Emscripten
+      - name: Setup Emscripten SDK
         run: |
           git clone https://github.com/emscripten-core/emsdk.git
           cd emsdk
@@ -21,19 +20,40 @@ jobs:
           ./emsdk activate 3.1.65
         shell: bash
 
-      - name: Download tinygltf
+      - name: Clone tinygltf repository (release branch)
         run: |
-          mkdir -p thirdparty/tinygltf
-          curl -L https://raw.githubusercontent.com/syoyo/tinygltf/master/tiny_gltf.h -o thirdparty/tinygltf/tiny_gltf.h
+          git clone --branch release https://github.com/syoyo/tinygltf.git
+        shell: bash
 
-      - name: Compile with tinygltf
+      - name: Compile C++ to WebAssembly with tinygltf sources
         run: |
-          source emsdk/emsdk_env.sh
-          mkdir -p build dist
-
-          em++ main.cpp tiny_gltf.cc \
-            -Ithirdparty/tinygltf \
+          source ./emsdk/emsdk_env.sh
+          mkdir -p dist
+          em++ cass.cpp \
+            tinygltf/tiny_gltf.cc \
+            tinygltf/extras/Johnson.cpp \
+            -Itinygltf \
+            -Itinygltf/extras \
+            -s WASM=1 \
             -s USE_SDL=2 \
+            -s USE_ZLIB=1 \
+            -s USE_SDL_IMAGE=2 \
+            -s SDL2_IMAGE_FORMATS='["png"]' \
+            -s FULL_ES2=1 \
+            -s MIN_WEBGL_VERSION=1 \
+            -s MAX_WEBGL_VERSION=1 \
+            --preload-file asserts \
+            -s ALLOW_MEMORY_GROWTH=1 \
+            -s ASYNCIFY \
+            -o dist/index.html
+        shell: bash
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
             -s USE_WEBGL2=1 \
             -s ALLOW_MEMORY_GROWTH=1 \
             -s ASSERTIONS=1 \
