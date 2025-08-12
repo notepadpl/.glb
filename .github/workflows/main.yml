@@ -29,7 +29,7 @@ jobs:
         run: |
           source ./emsdk/emsdk_env.sh
           mkdir -p dist
-          em++ cass.cpp \
+          em++ main.cpp \
             tinygltf/tiny_gltf.cc \
             tinygltf/extras/Johnson.cpp \
             -Itinygltf \
