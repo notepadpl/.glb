@@ -39,7 +39,7 @@ if (ENVIRONMENT_IS_NODE) {
 
 // --pre-jses are emitted after the Module integration code, so that they can
 // refer to Module (if they choose; they can also define Module)
-// include: /tmp/tmpodukrlgl.js
+// include: /tmp/tmp8gg99fv2.js
 
   if (!Module['expectedDataFileDownloads']) {
     Module['expectedDataFileDownloads'] = 0;
@@ -220,21 +220,21 @@ Module['FS_createPath']("/", "asserts", true, true);
 
   })();
 
-// end include: /tmp/tmpodukrlgl.js
-// include: /tmp/tmpa586ydwo.js
+// end include: /tmp/tmp8gg99fv2.js
+// include: /tmp/tmp2jheikk4.js
 
     // All the pre-js content up to here must remain later on, we need to run
     // it.
     if (Module['$ww'] || (typeof ENVIRONMENT_IS_PTHREAD != 'undefined' && ENVIRONMENT_IS_PTHREAD)) Module['preRun'] = [];
     var necessaryPreJSTasks = Module['preRun'].slice();
-  // end include: /tmp/tmpa586ydwo.js
-// include: /tmp/tmp3ei6ufbf.js
+  // end include: /tmp/tmp2jheikk4.js
+// include: /tmp/tmprnxg569e.js
 
     if (!Module['preRun']) throw 'Module.preRun should exist because file support used it; did a pre-js delete it?';
     necessaryPreJSTasks.forEach((task) => {
       if (Module['preRun'].indexOf(task) < 0) throw 'All preRun tasks that exist before user pre-js code should remain after; did you replace Module or modify Module.preRun?';
     });
-  // end include: /tmp/tmp3ei6ufbf.js
+  // end include: /tmp/tmprnxg569e.js
 
 
 // Sometimes an existing Module object exists with properties
@@ -9357,6 +9357,7 @@ var ASM_CONSTS = {
 
 
 
+
   var listenOnce = (object, event, func) => {
       object.addEventListener(event, func, { 'once': true });
     };
@@ -10279,7 +10280,9 @@ var wasmImports = {
   /** @export */
   glUseProgram: _glUseProgram,
   /** @export */
-  glVertexAttribPointer: _glVertexAttribPointer
+  glVertexAttribPointer: _glVertexAttribPointer,
+  /** @export */
+  glViewport: _glViewport
 };
 var wasmExports = createWasm();
 var ___wasm_call_ctors = createExportWrapper('__wasm_call_ctors', 0);
