@@ -193,6 +193,9 @@ int main() {
         std::cerr << "GL context creation failed." << std::endl;
         return 1;
     }
+int width, height;
+SDL_GetWindowSize(window, &width, &height);
+glViewport(0, 0, width, height);
 
     // Załaduj model GLB
     tinygltf::Model model;
