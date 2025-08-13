@@ -85,7 +85,9 @@ GLuint CreateShaderProgram() {
             vec3 lightDir = normalize(vec3(0.5, 1.0, 0.3));
             float light = max(dot(normalize(v_normal), lightDir), 0.0);
             vec4 texColor = texture2D(u_texture, v_texcoord);
-            gl_FragColor = vec4(texColor.rgb * light, texColor.a);
+            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); // Rysuj na czerwono
+ 
+           // gl_FragColor = vec4(texColor.rgb * light, texColor.a);
         }
     )";
 
