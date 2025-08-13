@@ -335,7 +335,7 @@ int main() {
     tinygltf::Model model;
     tinygltf::TinyGLTF loader;
     std::string err, warn;
-    if (!loader.LoadBinaryFromFile(&model, &err, &warn, "asserts/el.glb")) {
+    if (!loader.LoadBinaryFromFile(&model, &err, &warn, "asserts/earth_globe_hologram_2mb_looping_animation.glb")) {
         std::cerr << "Failed to load model: " << err << std::endl;
         return 1;
     }
