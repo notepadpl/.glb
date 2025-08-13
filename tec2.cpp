@@ -64,58 +64,48 @@ GLuint CompileShader(GLenum type, const char* source) {
     return shader;
 }
 
+// Tworzenie programu shaderowego
 GLuint CreateShaderProgram() {
-    
-const char* vertexSrc = R"(
-attribute vec3 aPos;
-attribute vec3 aNormal;
-attribute vec2 aUV;
+    const char* vertexSrc = R"(
+        attribute vec3 a_position;
+        attribute vec3 a_normal;
+        attribute vec2 a_texcoord;
 
-varying vec3 vNormal;
-varying vec2 vUV;
+        uniform mat4 u_mvp;
+        uniform mat4 u_model;
 
-uniform float rotX, rotY;
+        varying vec3 v_normal;
+        varying vec2 v_texcoord;
 
-void main(){
-    float cx = cos(rotX), sx = sin(rotX);
-    float cy = cos(rotY), sy = sin(rotY);
-    mat3 Rx = mat3(1, 0, 0, 0, cx, -sx, 0, sx, cx);
-    mat3 Ry = mat3(cy, 0, sy, 0, 1, 0, -sy, 0, cy);
-    vec3 p = Ry * Rx * aPos;
-    gl_Position = vec4(p * 0.1, 1.0);
-    
-    vNormal = normalize(Ry * Rx * aNormal);
-    vUV = aUV;
-}
-)";
+        void main() {
+            gl_Position = u_mvp * vec4(a_position, 1.0);
+            v_normal = mat3(u_model) * a_normal;
+            v_texcoord = a_texcoord;
+        }
+    )";
 
-const char* fragmentSrc = R"(
-precision mediump float;
+    // Przywrócony Fragment Shader z oświetleniem i teksturą
+    const char* fragmentSrc = R"(
+        precision mediump float;
 
-uniform sampler2D tex;
-varying vec2 vUV;
-varying vec3 vNormal;
+        varying vec3 v_normal;
+        varying vec2 v_texcoord;
 
-void main() {
-    vec3 texColor = texture2D(tex, vUV).rgb;
+        uniform sampler2D u_texture;
 
-    // Światło – niech podkreśla teksturę
-    vec3 lightDir = normalize(vec3(0.5, 1.0, 0.3));
-    float diff = max(dot(normalize(vNormal), lightDir), 0.0);
-
-    // Tekstura z lekkim światłem – nie za jasno, żeby model był przyciemniony
-    vec3 color = texColor * (0.4 + 0.6 * diff); // 0.4 bazowe + światło
-
-    gl_FragColor = vec4(color, 1.0);
-}
-
-)";
-
-
-)";
+        void main() {
+            vec3 lightDir = normalize(vec3(0.5, 1.0, 0.3));
+            float light = max(dot(normalize(v_normal), lightDir), 0.0);
+            vec4 texColor = texture2D(u_texture, v_texcoord);
+            gl_FragColor = vec4(texColor.rgb * light, texColor.a);
+        }
+    )";
 
     GLuint vs = CompileShader(GL_VERTEX_SHADER, vertexSrc);
+    if (vs == 0) return 0;
+    
     GLuint fs = CompileShader(GL_FRAGMENT_SHADER, fragmentSrc);
+    if (fs == 0) return 0;
 
     GLuint program = glCreateProgram();
     glAttachShader(program, vs);
@@ -129,6 +119,8 @@ void main() {
         glGetProgramInfoLog(program, 512, nullptr, log);
         std::cerr << "Program link error: " << log << std::endl;
         glDeleteProgram(program);
+        glDeleteShader(vs);
+        glDeleteShader(fs);
         return 0;
     }
 
