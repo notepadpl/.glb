@@ -292,6 +292,9 @@ void main_loop() {
     glUniformMatrix4fv(uniformModelLoc, 1, GL_FALSE, glm::value_ptr(model));
     glUniform1f(uniformRotXLoc, rotX);
     glUniform1f(uniformRotYLoc, rotY);
+glActiveTexture(GL_TEXTURE0);
+glBindTexture(GL_TEXTURE_2D, myModel.textureID);
+glUniform1i(uniformTextureLoc, 0);
 
 
     for (const auto& mesh : myModel.meshes) {
