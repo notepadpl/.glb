@@ -247,14 +247,24 @@ void main_loop() {
     SDL_GetWindowSize(window, &width, &height);
     glViewport(0, 0, width, height);
 
+
+
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), width / (float)height, 0.1f, 100.0f);
-    glm::mat4 view = glm::lookAt(glm::vec3(0, 1, 3), glm::vec3(0), glm::vec3(0,1,0));
+    
+    // Zmieniamy pozycję kamery, żeby była dalej
+    glm::mat4 view = glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0), glm::vec3(0,1,0));
+    
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::scale(model, glm::vec3(0.1f)); 
+    
+    // Zwiększ skalowanie na 1.0f
+    model = glm::scale(model, glm::vec3(1.0f)); 
+    
     glm::mat4 mvp = projection * view * model;
 
     glUniformMatrix4fv(uniformMVPLoc, 1, GL_FALSE, glm::value_ptr(mvp));
     glUniformMatrix4fv(uniformModelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+    // ... (reszta pętli renderującej)
 
     // Renderowanie wszystkich meshy
     for (const auto& mesh : myModel.meshes) {
