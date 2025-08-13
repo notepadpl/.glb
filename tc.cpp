@@ -143,9 +143,51 @@ GLuint CreateShaderProgram() {
     glDeleteShader(fs);
     return program;
 }
-
 // --- Ładowanie tekstury z GLTF ---
 GLuint LoadTextureFromGLTF(const tinygltf::Model& model, int textureIndex) {
+    if (textureIndex == -1 || textureIndex >= model.textures.size()) {
+        std::cerr << "Niepoprawny indeks tekstury (" << textureIndex << "). Brak tekstury lub poza zakresem.\n";
+        return 0;
+    }
+
+    const auto& texture = model.textures[textureIndex];
+    if (texture.source < 0 || texture.source >= model.images.size()) {
+        std::cerr << "Niepoprawny indeks zrodla obrazu dla tekstury " << textureIndex << ".\n";
+        return 0;
+    }
+    const auto& image = model.images[texture.source];
+
+    std::cout << "Ladowanie tekstury: " << image.name << " (" << image.width << "x" << image.height << ") format: " << image.pixel_type << "\n";
+
+    GLuint tex;
+    glGenTextures(1, &tex);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    
+    GLenum format = GL_RGBA;
+    if (image.component == 3) {
+        format = GL_RGB;
+    } else if (image.component == 1) {
+        format = GL_LUMINANCE;
+    }
+
+    glTexImage2D(GL_TEXTURE_2D, 0, format,
+                 image.width, image.height, 0,
+                 format, GL_UNSIGNED_BYTE, image.image.data());
+
+    // Tutaj usunęliśmy `glGenerateMipmap`. To powinno przyspieszyć ładowanie.
+    
+    // Zmieniamy filtry na GL_LINEAR, które nie wymagają mipmap.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    std::cout << "Tekstura " << image.name << " zaladowana pomyslnie (ID: " << tex << ").\n";
+    return tex;
+}
+// --- Ładowanie tekstury z GLTF ---
+GLuint LoadTextureFromGLTF2(const tinygltf::Model& model, int textureIndex) {
     if (textureIndex == -1 || textureIndex >= model.textures.size()) {
         std::cerr << "Niepoprawny indeks tekstury (" << textureIndex << "). Brak tekstury lub poza zakresem.\n";
         return 0; // Zwróć 0, jeśli tekstura jest niepoprawna
