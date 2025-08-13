@@ -254,7 +254,7 @@ int main() {
     tinygltf::Model model;
     tinygltf::TinyGLTF loader;
     std::string err, warn;
-    if (!loader.LoadBinaryFromFile(&model, &err, &warn, "asserts/vr_room_light_baked.glb")) {
+    if (!loader.LoadBinaryFromFile(&model, &err, &warn, "asserts/el.glb")) {
         std::cerr << "Failed to load model: " << err << std::endl;
         return 1;
     }
