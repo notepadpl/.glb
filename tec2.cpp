@@ -102,12 +102,27 @@ GLuint CreateShaderProgram() {
         }
     )";
 
-    const char* fragmentSrc = R"(
-        precision mediump float;
-        void main() {
-            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); // Tymczasowo rysuj na czerwono
-        }
-    )";
+    // Fragment Shader - Twoja oryginalna wersja z Assimp
+const char* fragmentSrc = R"(
+    precision mediump float;
+
+    uniform sampler2D tex;
+    varying vec2 vUV;
+    varying vec3 vNormal;
+
+    void main() {
+        vec3 texColor = texture2D(tex, vUV).rgb;
+
+        // Światło – niech podkreśla teksturę
+        vec3 lightDir = normalize(vec3(0.5, 1.0, 0.3));
+        float diff = max(dot(normalize(vNormal), lightDir), 0.0);
+
+        // Tekstura z lekkim światłem – nie za jasno, żeby model był przyciemniony
+        vec3 color = texColor * (0.4 + 0.6 * diff);
+
+        gl_FragColor = vec4(color, 1.0);
+    }
+)";
 
     GLuint vs = CompileShader(GL_VERTEX_SHADER, vertexSrc);
     GLuint fs = CompileShader(GL_FRAGMENT_SHADER, fragmentSrc);
