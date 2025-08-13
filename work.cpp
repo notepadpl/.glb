@@ -303,6 +303,9 @@ void main_loop() {
     glUniform1f(uniformRotXLoc, rotX);
     glUniform1f(uniformRotYLoc, rotY);
 
+glActiveTexture(GL_TEXTURE0);
+glBindTexture(GL_TEXTURE_2D, myModel.textureID);
+glUniform1i(uniformTextureLoc, 0);
 
     for (const auto& mesh : myModel.meshes) {
         glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);
