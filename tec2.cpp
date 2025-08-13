@@ -67,61 +67,67 @@ GLuint CompileShader(GLenum type, const char* source) {
 GLuint CreateShaderProgram() {
     const char* vertexSrc = R"(
         attribute vec3 a_position;
-        attribute vec3 a_normal;
-        attribute vec2 a_texcoord;
+attribute vec3 a_normal;
+attribute vec2 a_texcoord;
 
-        uniform mat4 u_mvp;
-        uniform mat4 u_model;
-        uniform float u_rotX;
-        uniform float u_rotY;
+uniform mat4 u_mvp;
+uniform mat4 u_model;
+uniform float u_rotX;
+uniform float u_rotY;
 
-        varying vec3 v_normal;
-        varying vec2 v_texcoord;
+varying vec3 v_normal;
+varying vec2 v_texcoord;
 
-        void main() {
-            float cx = cos(u_rotX), sx = sin(u_rotX);
-            float cy = cos(u_rotY), sy = sin(u_rotY);
-            mat4 Rx = mat4(
-                1.0, 0.0, 0.0, 0.0,
-                0.0, cx,  -sx, 0.0,
-                0.0, sx,  cx,  0.0,
-                0.0, 0.0, 0.0, 1.0
-            );
-            mat4 Ry = mat4(
-                cy, 0.0, sy, 0.0,
-                0.0, 1.0, 0.0, 0.0,
-                -sy, 0.0, cy, 0.0,
-                0.0, 0.0, 0.0, 1.0
-            );
+void main() {
+    float cx = cos(u_rotX), sx = sin(u_rotX);
+    float cy = cos(u_rotY), sy = sin(u_rotY);
 
-            mat4 rotatedModel = Ry * Rx * u_model;
-            
-            gl_Position = u_mvp * rotatedModel * vec4(a_position, 1.0);
-            v_normal = mat3(rotatedModel) * a_normal;
-            v_texcoord = a_texcoord;
-        }
+    mat4 Rx = mat4(
+        1.0, 0.0, 0.0, 0.0,
+        0.0, cx,  -sx, 0.0,
+        0.0, sx,  cx,  0.0,
+        0.0, 0.0, 0.0, 1.0
+    );
+    mat4 Ry = mat4(
+        cy, 0.0, sy, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        -sy, 0.0, cy, 0.0,
+        0.0, 0.0, 0.0, 1.0
+    );
+
+    mat4 rotatedModel = Ry * Rx * u_model;
+
+    gl_Position = u_mvp * rotatedModel * vec4(a_position, 1.0);
+
+    // ✅ Znormalizowane normalne
+    v_normal = normalize(mat3(rotatedModel) * a_normal);
+    v_texcoord = a_texcoord;
+}
+
     )";
 
     // Fragment Shader - Twoja oryginalna wersja z Assimp
 const char* fragmentSrc = R"(
     precision mediump float;
 
-    uniform sampler2D tex;
-    varying vec2 vUV;
-    varying vec3 vNormal;
+uniform sampler2D tex;
 
-    void main() {
-        vec3 texColor = texture2D(tex, vUV).rgb;
+varying vec3 v_normal;
+varying vec2 v_texcoord;
 
-        // Światło – niech podkreśla teksturę
-        vec3 lightDir = normalize(vec3(0.5, 1.0, 0.3));
-        float diff = max(dot(normalize(vNormal), lightDir), 0.0);
+void main() {
+    vec3 texColor = texture2D(tex, v_texcoord).rgb;
 
-        // Tekstura z lekkim światłem – nie za jasno, żeby model był przyciemniony
-        vec3 color = texColor * (0.4 + 0.6 * diff);
+    // ✅ Światło skierowane z kamery (Z+)
+    vec3 lightDir = normalize(vec3(0.0, 0.0, 1.0));
+    float diff = max(dot(normalize(v_normal), lightDir), 0.0);
 
-        gl_FragColor = vec4(color, 1.0);
-    }
+    // ✅ Lekko podświetlona tekstura
+    vec3 color = texColor * (0.3 + 0.7 * diff);
+
+    gl_FragColor = vec4(color, 1.0);
+}
+
 )";
 
     GLuint vs = CompileShader(GL_VERTEX_SHADER, vertexSrc);
