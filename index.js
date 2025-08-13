@@ -39,7 +39,7 @@ if (ENVIRONMENT_IS_NODE) {
 
 // --pre-jses are emitted after the Module integration code, so that they can
 // refer to Module (if they choose; they can also define Module)
-// include: /tmp/tmpeshv034c.js
+// include: /tmp/tmpo8_53hel.js
 
   if (!Module['expectedDataFileDownloads']) {
     Module['expectedDataFileDownloads'] = 0;
@@ -216,25 +216,25 @@ Module['FS_createPath']("/", "asserts", true, true);
     }
 
     }
-    loadPackage({"files": [{"filename": "/asserts/el.glb", "start": 0, "end": 438944}, {"filename": "/asserts/tmp", "start": 438944, "end": 438945}], "remote_package_size": 438945});
+    loadPackage({"files": [{"filename": "/asserts/earth_globe_hologram_2mb_looping_animation.glb", "start": 0, "end": 3301032}, {"filename": "/asserts/el.glb", "start": 3301032, "end": 3739976}, {"filename": "/asserts/tmp", "start": 3739976, "end": 3739977}], "remote_package_size": 3739977});
 
   })();
 
-// end include: /tmp/tmpeshv034c.js
-// include: /tmp/tmp9ambj8pu.js
+// end include: /tmp/tmpo8_53hel.js
+// include: /tmp/tmp1ekc5rt4.js
 
     // All the pre-js content up to here must remain later on, we need to run
     // it.
     if (Module['$ww'] || (typeof ENVIRONMENT_IS_PTHREAD != 'undefined' && ENVIRONMENT_IS_PTHREAD)) Module['preRun'] = [];
     var necessaryPreJSTasks = Module['preRun'].slice();
-  // end include: /tmp/tmp9ambj8pu.js
-// include: /tmp/tmpda6krqgs.js
+  // end include: /tmp/tmp1ekc5rt4.js
+// include: /tmp/tmp7aefs8_e.js
 
     if (!Module['preRun']) throw 'Module.preRun should exist because file support used it; did a pre-js delete it?';
     necessaryPreJSTasks.forEach((task) => {
       if (Module['preRun'].indexOf(task) < 0) throw 'All preRun tasks that exist before user pre-js code should remain after; did you replace Module or modify Module.preRun?';
     });
-  // end include: /tmp/tmpda6krqgs.js
+  // end include: /tmp/tmp7aefs8_e.js
 
 
 // Sometimes an existing Module object exists with properties
