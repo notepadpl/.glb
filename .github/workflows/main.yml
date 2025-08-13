@@ -35,7 +35,7 @@ jobs:
         run: |
           source ./emsdk/emsdk_env.sh
           mkdir -p dist
-          em++ work.cpp \
+          em++ tc.cpp \
             tinygltf/tiny_gltf.cc \
             -Itinygltf \
             -Itinygltf/extras \
