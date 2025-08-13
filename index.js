@@ -39,7 +39,7 @@ if (ENVIRONMENT_IS_NODE) {
 
 // --pre-jses are emitted after the Module integration code, so that they can
 // refer to Module (if they choose; they can also define Module)
-// include: /tmp/tmpavut5la4.js
+// include: /tmp/tmpj9mvsj_h.js
 
   if (!Module['expectedDataFileDownloads']) {
     Module['expectedDataFileDownloads'] = 0;
@@ -220,21 +220,21 @@ Module['FS_createPath']("/", "asserts", true, true);
 
   })();
 
-// end include: /tmp/tmpavut5la4.js
-// include: /tmp/tmpnelcl69g.js
+// end include: /tmp/tmpj9mvsj_h.js
+// include: /tmp/tmpt6q06yc8.js
 
     // All the pre-js content up to here must remain later on, we need to run
     // it.
     if (Module['$ww'] || (typeof ENVIRONMENT_IS_PTHREAD != 'undefined' && ENVIRONMENT_IS_PTHREAD)) Module['preRun'] = [];
     var necessaryPreJSTasks = Module['preRun'].slice();
-  // end include: /tmp/tmpnelcl69g.js
-// include: /tmp/tmpa03o7itg.js
+  // end include: /tmp/tmpt6q06yc8.js
+// include: /tmp/tmpcwl3ybqc.js
 
     if (!Module['preRun']) throw 'Module.preRun should exist because file support used it; did a pre-js delete it?';
     necessaryPreJSTasks.forEach((task) => {
       if (Module['preRun'].indexOf(task) < 0) throw 'All preRun tasks that exist before user pre-js code should remain after; did you replace Module or modify Module.preRun?';
     });
-  // end include: /tmp/tmpa03o7itg.js
+  // end include: /tmp/tmpcwl3ybqc.js
 
 
 // Sometimes an existing Module object exists with properties
@@ -9363,6 +9363,8 @@ var ASM_CONSTS = {
 
 
 
+
+
   var listenOnce = (object, event, func) => {
       object.addEventListener(event, func, { 'once': true });
     };
@@ -10235,6 +10237,8 @@ var wasmImports = {
   /** @export */
   fd_write: _fd_write,
   /** @export */
+  glActiveTexture: _glActiveTexture,
+  /** @export */
   glAttachShader: _glAttachShader,
   /** @export */
   glBindBuffer: _glBindBuffer,
@@ -10290,6 +10294,8 @@ var wasmImports = {
   glTexParameteri: _glTexParameteri,
   /** @export */
   glUniform1f: _glUniform1f,
+  /** @export */
+  glUniform1i: _glUniform1i,
   /** @export */
   glUniformMatrix4fv: _glUniformMatrix4fv,
   /** @export */
