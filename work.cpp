@@ -102,12 +102,22 @@ GLuint CreateShaderProgram() {
         }
     )";
 
-    const char* fragmentSrc = R"(
-        precision mediump float;
-        void main() {
-            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); // Tymczasowo rysuj na czerwono
-        }
-    )";
+    // Fragment Shader z oświetleniem i teksturą
+const char* fragmentSrc = R"(
+    precision mediump float;
+
+    varying vec3 v_normal;
+    varying vec2 v_texcoord;
+
+    uniform sampler2D u_texture;
+
+    void main() {
+        vec3 lightDir = normalize(vec3(0.5, 1.0, 0.3));
+        float light = max(dot(normalize(v_normal), lightDir), 0.0);
+        vec4 texColor = texture2D(u_texture, v_texcoord);
+        gl_FragColor = vec4(texColor.rgb * light, texColor.a);
+    }
+)";
 
     GLuint vs = CompileShader(GL_VERTEX_SHADER, vertexSrc);
     GLuint fs = CompileShader(GL_FRAGMENT_SHADER, fragmentSrc);
